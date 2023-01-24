@@ -3,7 +3,6 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/zipkin-server-2.23.19-exec.jar
 
 ### STS ###
 .apt_generated
