@@ -42,24 +42,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee saveDEmployee = employeeRepository.save(employee);
 
-        EmployeeDto savedEmployeeDto = new EmployeeDto(
+        return new EmployeeDto(
                 saveDEmployee.getId(),
                 saveDEmployee.getFirstName(),
                 saveDEmployee.getLastName(),
                 saveDEmployee.getEmail(),
                 saveDEmployee.getDepartmentCode()
         );
-
-        return savedEmployeeDto;
     }
 
     @CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
-    //@Retry(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
     @Override
     public APIResponseDto getEmployeeById(Long employeeId) {
 
         LOGGER.info("inside getEmployeeById() method");
-        Employee employee = employeeRepository.findById(employeeId).get();
+        Employee employee = employeeRepository.findById(employeeId).orElse(new Employee());
 
 //        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://DEPARTMENT-SERVICE/api/departments/" + employee.getDepartmentCode(),
 //                DepartmentDto.class);
@@ -67,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        DepartmentDto departmentDto = responseEntity.getBody();
 
 //        DepartmentDto departmentDto = webClient.get()
-//                .uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
+//                .uri("http://DEPARTMENT-SERVICE/api/departments/" + employee.getDepartmentCode())
 //                .retrieve()
 //                .bodyToMono(DepartmentDto.class)
 //                .block();
